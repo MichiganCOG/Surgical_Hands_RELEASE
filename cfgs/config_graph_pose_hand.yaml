@@ -1,0 +1,62 @@
+# Preprocessing
+clip_length:       -1                          # Number of frames within a clip 
+clip_offset:       0                         # Frame offset between beginning of video and clip (1st clip only) 
+clip_stride:       0                         # Frame offset between successive frames
+crop_shape:        [368,368]                 # (Height, Width) of frame  
+crop_type:         CropClip                  # Type of cropping operation (Random, Central and None)  
+final_shape:       [368,368]                 # (Height, Width) of input to be given to CNN
+num_clips:         1                        # Number clips to be generated from a video (<0: uniform sampling, 0: Divide entire video into clips, >0: Defines number of clips) 
+random_offset:     0                         # Boolean switch to generate a clip length sized clip from a video 
+resize_shape:      [368,368]                 # (Height, Width) to resize original data 
+sample_duration:   16                        # Temporal size of video to be provided as input to the model 
+sample_size:       112                       # Height of frame to be provided as input to the model
+subtract_mean:     [123.675, 116.28, 103.53]     # Subtract mean (R,G,B) from all frames during preprocessing
+
+# Experiment Setup 
+acc_metric:        'Contrastive_Accuracy'            # Accuracy metric 
+batch_size:        32                    # Numbers of videos in a mini-batch 
+dataset:           Surgical_Hands_KP   # Name of dataset 
+debug:             0                     # If True, do not plot, save, or create data files 
+epoch:             15                     # Total number of epochs 
+exp:               exp                   # Experiment name
+gamma:             0.1                   # Multiplier with which to change learning rate
+grad_max_norm:     0                      # Norm for gradient clipping 
+json_path:         /z/home/natlouis/data/pub_surgical/annotations # Path to the json file for the given dataset
+labels:            1                     # Number of total classes in the dataset
+load_type:         train_val                 # Environment selection, to include only training/training and validation/testing dataset
+loss_type:         ContrastiveLoss      # Loss function
+lr:                0.001                 # Learning rate
+milestones:        10,20,30     # Epoch values to change learning rate     
+model:             GCN                   # Name of model to be loaded  
+momentum:          0.9                   # Momentum value in optimizer
+num_workers:       8                     # Number of CPU worker used to load data
+opt:               sgd                   # Name of optimizer
+preprocess:        default               # String argument to select preprocessing type
+pretrained:        1                     # Load pretrained network 
+pseudo_batch_loop: 1                     # Pseudo-batch size multiplier to mimic large minibatches 
+rerun:             1                     # Number of trials to repeat an experiment
+save_dir:          './results'           # Path to results directory
+seed:              999                   # Seed for reproducibility 
+weight_decay:      0.0001                # Weight decay
+
+#Config parameters unique to pose model
+gaussian_sigma:    3.0        # Gaussian keypoint sigma value (default is 3.0)
+in_channels:       2          # (x,y) or (x,y,confidence)
+num_class:         57         # Maximum number of unique ids throughout the dataset
+temporal_kernel_size: 1       # Temporal kernel size in graph convnet
+partition_strategy: spatial   # Partitioning stratgies as outlined in ST-GCN. (uniform, distance, spatial)
+layout:             hand # Joint layout (posetrack, posetrack_stgcn, mscoco, openpose, ntu-rgb+d, ntu_edge, hand)
+edge_importance_weighting: True
+
+#For COCO dataset
+heatmap_size:      [46,46]  # (Height, Width)
+add_neck: True
+
+#For PoseTrack18_KP dataset
+sample_all_obj: True          # Returns all objects in all frames as separate samples
+
+out_feat: False #unused in this config, but will output intermediate features w/o saving them
+#For Contrastive Loss
+cont_loss_margin: 21.0
+#For Contrastive Accuracy
+cont_acc_margin:  6.6

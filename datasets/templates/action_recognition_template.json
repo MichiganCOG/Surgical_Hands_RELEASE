@@ -1,0 +1,16 @@
+[
+    {
+        "frames (list)": [
+            {
+                "img_path (str)": "FRAME_PATH",
+                "actions (list)": [
+                    {
+                        "action_class": "ACTION_CLASS"
+                    }
+                ]
+            }
+        ],
+        "frame_size (int, int)": "(WIDTH,HEIGHT)",
+        "base_path (str)": "BASE_VID_PATH"
+    }
+]
