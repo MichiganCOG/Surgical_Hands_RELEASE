@@ -5,7 +5,7 @@ clip_stride:       0                         # Frame offset between successive f
 crop_shape:        [368,368]                 # (Height, Width) of frame  
 crop_type:         CropClip                  # Type of cropping operation (Random, Central and None)  
 final_shape:       [368,368]                 # (Height, Width) of input to be given to CNN
-num_clips:         -1                        # Number clips to be generated from a video (<0: uniform sampling, 0: Divide entire video into clips, >0: Defines number of clips) 
+num_clips:         0                        # Number clips to be generated from a video (<0: uniform sampling, 0: Divide entire video into clips, >0: Defines number of clips) 
 random_offset:     0                         # Boolean switch to generate a clip length sized clip from a video 
 resize_shape:      [368,368]                 # (Height, Width) to resize original data 
 sample_duration:   16                        # Temporal size of video to be provided as input to the model 
