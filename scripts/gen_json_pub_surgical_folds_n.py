@@ -15,7 +15,7 @@ source_json_file = 'data/surgical_hands_release/annotations.json'
 source_res_dir   = 'data/surgical_hands_release/images'
 
 target_json_dir = 'data/pub_surgical/'
-target_poseval_dir = 'data/temp_dir/' #TODO: Replace with poseval code
+target_poseval_dir = 'poseval_hand/py' #TODO: Replace with poseval code
 
 #certain factors (poseval) requires numeric video names
 vid2idx = {'fTFTk_q8dh0':'000001'

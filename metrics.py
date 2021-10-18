@@ -1126,7 +1126,7 @@ class Eval_PoseTrack18_det():
         self.conf_threshold = kwargs['conf_threshold'] 
 
         #Run PoseTrack evaluation directly from here
-        poseval_dir = kwargs.get('poseval_dir', '/z/home/natlouis/poseval_hand/py')
+        poseval_dir = kwargs.get('poseval_dir', './poseval_hand/py')
         #os.environ['PYTHONPATH'] = os.path.join(poseval_dir,'..','py-motmetrics:'+os.getenv('PYTHONPATH',''))
         self.exec_loc = os.path.join(poseval_dir, 'evaluate.py')
 
@@ -1134,11 +1134,10 @@ class Eval_PoseTrack18_det():
         run_id = kwargs.get('run_id', kwargs['exp'])
         self.pred_dir = os.path.join(poseval_dir, 'prediction-'+kwargs['model']+'-'+run_id+'/')
 
-        #TODO: Cheap and easy fix, shouldn't leave permanently like this
         tags = kwargs['tags']
         if tags:
             fold = tags[0]
-            self.targ_dir = os.path.join(poseval_dir, 'temp_target_'+fold+'/')
+            self.targ_dir = os.path.join(poseval_dir, 'target_'+fold+'/')
         else:
             self.targ_dir = os.path.join(poseval_dir, 'target/')
         
