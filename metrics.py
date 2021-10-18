@@ -1805,7 +1805,7 @@ class Eval_PoseTrack17_det():
         self.conf_threshold = kwargs['conf_threshold'] 
 
         #Run PoseTrack evaluation directly from here
-        poseval_dir = kwargs.get('poseval_dir', '/z/home/natlouis/poseval/py')
+        poseval_dir = kwargs.get('poseval_dir', './poseval_hand/py')
         os.environ['PYTHONPATH'] = os.path.join(poseval_dir,'..','py-motmetrics:'+os.getenv('PYTHONPATH',''))
 
         #self.exec_loc = os.path.join(poseval_dir, 'evaluate.py')

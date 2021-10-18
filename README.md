@@ -15,7 +15,7 @@ Recommended installation with VirtualEnvWrapper and [requirements.txt](https://g
  - Download the following and extract to `$ROOT/data` directory
 	 - [Surgical Hands dataset](https://drive.google.com/file/d/1l5_4rlZLvOim34uHCKic4GUXvXfjDN_9/view?usp=sharing)
 	 - [Hand Detections](https://drive.google.com/file/d/1dWhZF595ixS-XBIeawaS3mY01yfsE_BO/view?usp=sharing)
- - Configure using `scripts/gen_json_surgical_hands_folds_n.py` (for ground truth) and `scripts/gen_json_surgical_dets_hands_folds_n.py` (for detections) into formats needed for code base
+ - Configure using `scripts/gen_json_surgical_hands_folds_n.py` (for ground truth) and `scripts/gen_json_surgical_hands_dets_folds_n.py` (for detections) into formats needed for code base
 	 - All experiments are done using k-fold cross validation and each data is split accordingly.
 
 ## Weights
