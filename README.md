@@ -36,7 +36,7 @@ Recommended installation with VirtualEnvWrapper and [requirements.txt](https://g
 
  
 ### Evaluation
-For evaluation, we modify the [Poseval Evaluation repository](https://github.com/leonid-pishchulin/poseval) for hands instead of human pose (amongst other threshold and validation changes). All code is contained within poseval\_hand.
+For evaluation, we modify the [Poseval Evaluation repository](https://github.com/leonid-pishchulin/poseval) for hands instead of human pose (amongst other threshold and validation changes). All code is contained within [poseval\_hand](https://github.com/MichiganCOG/Surgical_Hands_RELEASE/tree/main/poseval_hand).
  
 - (Baseline) `python eval.py --cfg_file cfgs/config_eval_surgical_hands_baseline.yaml --json_path ./data/pub_surgical/annotations_folda$NUM --tags folda$NUM --pretrained ./weights/Surgical_Hands/FlowTrack/folda$NUM.pkl`
 
