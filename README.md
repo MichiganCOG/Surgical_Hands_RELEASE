@@ -10,13 +10,14 @@ This source code was built using [ViP: Video Platform for PyTorch](https://githu
 
 Recommended installation with VirtualEnvWrapper and [requirements.txt](https://github.com/MichiganCOG/Surgical_Hands_RELEASE/blob/main/requirements.txt)
 
-## Dataset
- - Dataset used for image pretraining are the Manual and Synthetic hand datasets (hence Mixed Hands) from the [CMU Panoptic Dataset](http://domedb.perception.cs.cmu.edu/handdb.html)
+## Datasets
+ - **Mixed Hands** Dataset used for image pretraining are the Manual and Synthetic hand datasets (hence Mixed Hands) from the [CMU Panoptic Dataset](http://domedb.perception.cs.cmu.edu/handdb.html)
 	- Extract to `$ROOT/data` directory and configure using `scripts/gen_json_mixed_hands.py`
- - Download the following and extract to `$ROOT/data` directory
-	 - [Surgical Hands dataset](https://drive.google.com/file/d/1l5_4rlZLvOim34uHCKic4GUXvXfjDN_9/view?usp=sharing)
-	 - [Hand Detections](https://drive.google.com/file/d/1dWhZF595ixS-XBIeawaS3mY01yfsE_BO/view?usp=sharing)
- - Configure using `scripts/gen_json_surgical_hands_folds_n.py` (for ground truth) and `scripts/gen_json_surgical_hands_dets_folds_n.py` (for detections) into formats needed for code base
+ - **Surgical Hands** Our newly collected dataset that contains videos of surgical procedures accompanied with bounding box, pose, and tracking annotations. 
+ 	 - Download the following and extract to `$ROOT/data` directory
+	  	- [Surgical Hands dataset](https://drive.google.com/file/d/1l5_4rlZLvOim34uHCKic4GUXvXfjDN_9/view?usp=sharing)
+	  	- [Hand Detections](https://drive.google.com/file/d/1dWhZF595ixS-XBIeawaS3mY01yfsE_BO/view?usp=sharing)
+	 - Configure using `scripts/gen_json_surgical_hands_folds_n.py` (for ground truth) and `scripts/gen_json_surgical_hands_dets_folds_n.py` (for detections) into formats needed for code base
 	 - All experiments are done using k-fold cross validation and each data is split accordingly.
 
 ## Weights
