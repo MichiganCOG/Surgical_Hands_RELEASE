@@ -1600,7 +1600,7 @@ class Eval_PoseTrack18_det():
             vid_id   = vid_ids[b]
 
             if f_path != 'None':
-                seq_name = f_path.split('/')[-2]
+                seq_name = vid_ids[b]
 
             if bbox[b,t,0] == -1: #skipped detection (low score) or no detection
                 is_labeled = False

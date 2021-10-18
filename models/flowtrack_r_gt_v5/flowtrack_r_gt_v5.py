@@ -161,7 +161,7 @@ class FlowTrack_R_GT_V5(nn.Module):
 
     def __init__(self, **kwargs):
 
-        hands_preprocessing = ['Mixed_Hands', 'Manual_Hands', 'Hand_Data', 'Surgical_Hands', 'Surgical_Hands_v2']
+        hands_preprocessing = ['Mixed_Hands', 'Manual_Hands', 'Hand_Dets', 'Surgical_Hands', 'Surgical_Hands_v2']
 
         if kwargs['dataset'] in hands_preprocessing:
             self.train_transforms = PreprocessTrainHand(**kwargs)
