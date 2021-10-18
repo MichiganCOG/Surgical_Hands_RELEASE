@@ -21,8 +21,8 @@ debug:             1                     # If True, do not plot, save, or create
 epoch:             50                    # Total number of epochs 
 exp:               pretrain_resnet       # Experiment name
 gamma:             0.1                   # Multiplier with which to change learning rate
-grad_max_norm:     0                      # Norm for gradient clipping 
-json_path:         /z/home/natlouis/data/hand_labels_mixed     # Path to the json file for the given dataset
+grad_max_norm:     0                     # Norm for gradient clipping 
+json_path:         data/hand_labels_mixed     # Path to the json file for the given dataset
 labels:            51                    # Number of total classes in the dataset
 load_type:         train_val             # Environment selection, to include only training/training and validation/testing dataset
 loss_type:         JointsMSELoss         # Loss function
@@ -68,7 +68,7 @@ num_deconv_kernels: [4,4,4]
 num_layers:         152
 
 #Poseval evaluation for Hands.
-poseval_dir: '/z/home/natlouis/poseval_hand/py'
+poseval_dir: 'data/poseval_hand/py'
 
 #For the recursively trained models
 min_temporal_dist: 4 
@@ -81,4 +81,4 @@ out_feat: False
 cont_acc_margin: 15
 in_channels: 2
 gcn_checkpoint: './results/GCN/Surgical_Hands_KP_lamss5me/checkpoints/Surgical_Hands_KP_best_model.pkl'
-#flow_data_root: '/z/home/natlouis/data/pub_surgical/flow_images' #Source of optical flow generated images
+#flow_data_root: 'data/pub_surgical/flow_images' #Source of optical flow generated images

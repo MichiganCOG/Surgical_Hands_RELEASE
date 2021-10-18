@@ -70,7 +70,7 @@ num_deconv_layers:  3
 num_layers:         152
 
 #Poseval evaluation for Hands.
-poseval_dir: './natlouis/poseval_hand/py'
+poseval_dir: 'data/poseval_hand/py'
 #Pose Matching during tracking
 l2_margin: 800.0     #margin for l2 matching strategy
 last_T_frames: 1     #Number of frames to look back for matching
@@ -84,4 +84,4 @@ out_feat: False
 #gcn_checkpoint: './results/GCN/Surgical_Hands_KP_lamss5me/checkpoints/Surgical_Hands_KP_best_model.pkl'
 
 #If using optical flow images
-#flow_data_root: '/z/home/natlouis/data/pub_surgical/flow_images' #Source of optical flow generated images
+#flow_data_root: 'data/pub_surgical/flow_images' #Source of optical flow generated images

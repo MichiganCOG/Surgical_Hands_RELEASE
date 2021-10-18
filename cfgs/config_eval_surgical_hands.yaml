@@ -90,4 +90,4 @@ out_feat: False
 #gcn_checkpoint: './results/GCN/Surgical_Hands_KP_lamss5me/checkpoints/Surgical_Hands_KP_best_model.pkl'
 
 #If using optical flow images
-#flow_data_root: '/z/home/natlouis/data/pub_surgical/flow_images' #Source of optical flow generated images
+#flow_data_root: 'data/pub_surgical/flow_images' #Source of optical flow generated images

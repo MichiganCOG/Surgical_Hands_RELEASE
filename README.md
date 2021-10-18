@@ -12,6 +12,7 @@ Recommended installation with VirtualEnvWrapper and [requirements.txt](https://g
 
 ## Dataset
  - Dataset used for image pretraining are the Manual and Synthetic hand datasets (hence Mixed Hands) from the [CMU Panoptic Dataset](http://domedb.perception.cs.cmu.edu/handdb.html)
+	- Extract to `$ROOT/data` directory and configure using `scripts/gen_json_mixed_hands.py`
  - Download the following and extract to `$ROOT/data` directory
 	 - [Surgical Hands dataset](https://drive.google.com/file/d/1l5_4rlZLvOim34uHCKic4GUXvXfjDN_9/view?usp=sharing)
 	 - [Hand Detections](https://drive.google.com/file/d/1dWhZF595ixS-XBIeawaS3mY01yfsE_BO/view?usp=sharing)
