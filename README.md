@@ -8,7 +8,7 @@ This source code was built using [ViP: Video Platform for PyTorch](https://githu
 - PyTorch v1.0+
 - CUDA 10 or 11
 
-Recommended installation with VirtualEnvWrapper and requirements.txt
+Recommended installation with VirtualEnvWrapper and [requirements.txt](https://github.com/MichiganCOG/Surgical_Hands_RELEASE/blob/main/requirements.txt)
 
 ## Dataset
  - Dataset used for image pretraining are the Manual and Synthetic hand datasets (hence Mixed Hands) from the [CMU Panoptic Dataset](http://domedb.perception.cs.cmu.edu/handdb.html)
