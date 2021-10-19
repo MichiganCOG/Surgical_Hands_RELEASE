@@ -136,27 +136,7 @@ class Parse():
             tags                 = '')                       
 
         #Dictionary of the command-line arguments passed
-        self.cmd_args, extra_args = parser.parse_known_args()
-        self.cmd_args = vars(self.cmd_args)
-
-        #Grab extra args passed through command line
-        for item in extra_args:
-            name, value = item.split('--')[-1].split('=')
-
-            #Need better way to automatically typecast variables
-            try:
-                value = int(value)
-            except ValueError:
-                try:
-                    value = float(value)
-                except ValueError:
-                    if value.lower() in ['true', 'false']:
-                        value = bool(value)
-                    else:
-                        value = str(value) #Keep as string
-    
-            #Add to global args list
-            self.cmd_args[name] = value
+        self.cmd_args = vars(parser.parse_args())
 
         config_file = self.cmd_args['cfg_file']
         with open(config_file, 'r') as f:
