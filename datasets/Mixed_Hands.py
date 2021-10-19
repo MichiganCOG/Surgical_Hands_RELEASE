@@ -234,7 +234,7 @@ class Mixed_Hands(DetectionDataset):
                 padding[frame_ind]          = [pl, pt, pr, pb]
 
             # Load frame, convert to RGB from BGR
-            full_image = cv2.imread(os.path.join(base_path, frame_path))[...,::-1]
+            full_image = cv2.imread(frame_path)[...,::-1]
             input_data.append(full_image)
             #input_data.append(cv2.imread(os.path.join(base_path, frame_path))) #Keep as BGR
 

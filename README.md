@@ -22,6 +22,7 @@ Recommended installation with VirtualEnvWrapper and [requirements.txt](https://g
 
 ## Weights
 - Download and extract to `$ROOT/weights` directory
+	- ResNet152 ImageNet [weights](https://drive.google.com/file/d/14u4TYEpu6d6Eh4PsIOjeTYiMfc4nXAMe/view?usp=sharing)
 	- Pretrained [weights](https://drive.google.com/drive/folders/1upSSUr4c2_SMmpzfQumoevNYhpig0UuW?usp=sharing) on Mixed Hands image dataset
 	- Baseline [weights](https://drive.google.com/drive/folders/1skZGRnX_6SNiB-DROgg1RYBy4qI0BURB?usp=sharing) (trained on Surgical Hands)
 	- Our model [weights](https://drive.google.com/drive/folders/1zCnU8drwr1Mzy4rOmaP3mQ-jSXiYOALN?usp=sharing) (trained on Surgical Hands)
@@ -29,7 +30,7 @@ Recommended installation with VirtualEnvWrapper and [requirements.txt](https://g
 
 ## Training and Evaluation
 ### Pre-train on larger image dataset
-`python train.py --cfg_file ./cfgs/config_hand_resnet --dataset MixedHands --acc_metric PCK_FlowTrack --json_path TBD --model FlowTrack --epoch 75 --lr 1e-4 --batch_size 16 --milestones 40,60 `
+`python train.py --cfg_file ./cfgs/config_hand_resnet --dataset Mixed_Hands --acc_metric PCK_FlowTrack --json_path ./data/hand_labels_mixed --model FlowTrack --epoch 75 --lr 1e-4 --batch_size 16 --milestones 40,60 `
 
 ### Finetune on our (Surgical Hands) dataset
 - (Baseline) `python train.py --cfg_file ./cfgs/config_train_surgical_hands_baseline.yaml --json_path ./data/pub_surgical/annotations_fold$NUM --pretrained ./weights/Mixed_Hands/Mixed_Hands_best_model.pkl --tags folda$NUM`

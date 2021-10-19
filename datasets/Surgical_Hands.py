@@ -131,7 +131,7 @@ class Surgical_Hands(DetectionDataset):
 
                 base_path = item['base_path']
                 frame_path = frm['img_path']
-                vis = (cv2.imread(os.path.join(base_path, frame_path))[...,::-1])
+                vis = (cv2.imread(frame_path)[...,::-1])
                 plt.imshow(vis)
 
                 for bbox in bbox_data:

@@ -245,7 +245,7 @@ class Surgical_Hands_v2(DetectionDataset):
 
                 base_path = item['base_path']
                 frame_path = frm['img_path']
-                vis = (cv2.imread(os.path.join(base_path, frame_path))[...,::-1])
+                vis = (cv2.imread(frame_path)[...,::-1])
                 plt.imshow(vis)
 
                 for bbox in bbox_data:
@@ -389,8 +389,7 @@ class Surgical_Hands_v2(DetectionDataset):
             frame_ids[frame_ind] = frame_id
 
             # Load frame, convert to RGB from BGR and normalize from 0 to 1
-            input_data = cv2.imread(os.path.join(base_path, frame_path))[...,::-1]
-            #input_data = cv2.imread(os.path.join(base_path, frame_path)) #Keep as BGR
+            input_data = cv2.imread(frame_path)[...,::-1]
 
             for obj in frame['objs']:
                 trackid   = obj['trackid'] #Let's ignore trackid for now, only one annotation per image
