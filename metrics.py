@@ -8,7 +8,11 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-import wandb 
+try:
+    import wandb
+    use_wandb = True
+except ImportError as e: #Optionally use wandb for logging
+    use_wandb = False
 
 from models.gcn.gcn import GCN
 
@@ -206,7 +210,7 @@ class PCK_Curve_Hand():
         self.nbatch = np.ceil(self.ndata/kwargs['batch_size']).astype(np.int)
         self.count  = 0
 
-        self.logger = kwargs['logger'] #wandb logging tool
+        self.logger = kwargs['logger'] #logging tool
         self.debug  = kwargs['debug']
 
     def get_accuracy(self, predictions, data):
@@ -339,8 +343,9 @@ class PCK_Curve_Hand():
 
             if not self.debug:
                 mean_acc = torch.mean(self.acc, dim=1).cpu().numpy()
-                for idx in range(len(self.threshold)):
-                    self.logger.log({'PCKh (Normalized Distance)':mean_acc[idx]})
+                if use_wandb:
+                    for idx in range(len(self.threshold)):
+                        self.logger.log({'PCKh (Normalized Distance)':mean_acc[idx]})
 
 
         #Return area under the curve
@@ -374,7 +379,7 @@ class PCK_FlowTrack():
         self.correct = 0
         self.total   = 0
 
-        self.logger = kwargs['logger'] #wandb logging tool 
+        self.logger = kwargs['logger'] #logging tool 
         self.debug  = kwargs['debug'] 
 
     def get_max_preds(self, batch_heatmaps):
@@ -613,7 +618,7 @@ class Save_Video_Keypoints():
         self.dex = []
         self.xy_positions = {} 
 
-        self.logger = kwargs['logger'] #wandb logging tool
+        self.logger = kwargs['logger'] #logging tool
         self.debug  = kwargs['debug']
         
     def get_accuracy(self, predictions, data):
@@ -752,9 +757,6 @@ class Save_Video_Keypoints():
                 self.prev_seq = seq_name 
                 self.vout.release()
 
-                if not self.debug and self.vout.isOpened():
-                    self.logger.log({seq_name:wandb.Video(self.vout_path, caption='Output video example', fps=self.fps, format='mp4')})
-        
                 self.vout_path = os.path.join(self.output_dir,seq_name+'.mp4')
                 print(self.vout_path)
                 self.vout.open(self.vout_path, self.fourcc, self.fps, (frame_w.item(), frame_h.item()), True) 
@@ -946,7 +948,7 @@ class Save_Frame_Video_Heatmaps():
 
         self.prev_seq = None 
 
-        self.logger = kwargs['logger'] #wandb logging tool
+        self.logger = kwargs['logger'] #logging tool
         self.debug  = kwargs['debug']
         
     def get_accuracy(self, predictions, data):
@@ -1028,9 +1030,6 @@ class Save_Frame_Video_Heatmaps():
 
                 self.vout.release()
 
-                if not self.debug and self.vout.isOpened():
-                    self.logger.log({seq_name:wandb.Video(self.vout_path, caption='Output video example', fps=self.fps, format='mp4')})
-        
                 self.vout_path = os.path.join(self.output_dir,seq_name+'.mp4')
                 print(self.vout_path)
                 self.vout.open(self.vout_path, self.fourcc, self.fps, (frame_w, frame_h), True) 
@@ -1171,7 +1170,7 @@ class Eval_PoseTrack18_det():
 
         self.viz = kwargs['viz']
 
-        self.logger = kwargs['logger'] #wandb logging tool
+        self.logger = kwargs['logger'] #logging tool
         self.debug  = kwargs['debug']
 
     def get_max_preds(self, batch_heatmaps):
@@ -1748,8 +1747,9 @@ class Eval_PoseTrack18_det():
             print(scores)
 
             if not self.debug:
-                for h,s in zip(headers, scores):
-                    self.logger.log({'AP '+h:float(s)})
+                if use_wandb:
+                    for h,s in zip(headers, scores):
+                        self.logger.log({'AP '+h:float(s)})
 
             print('Running PoseTrack Pose Tracking Eval')
             try:
@@ -1770,8 +1770,9 @@ class Eval_PoseTrack18_det():
             print(scores)
 
             if not self.debug:
-                for m,h,s in zip(metric, headers, scores):
-                    self.logger.log({m+' '+h:float(s)})
+                if use_wandb:
+                    for m,h,s in zip(metric, headers, scores):
+                        self.logger.log({m+' '+h:float(s)})
 
             print('Saved to: {}'.format(self.pred_dir))
 
@@ -1849,7 +1850,7 @@ class Eval_PoseTrack17_det():
 
         self.viz = kwargs['viz']
 
-        self.logger = kwargs['logger'] #wandb logging tool
+        self.logger = kwargs['logger'] #logging tool
         self.debug  = kwargs['debug']
 
     def get_max_preds(self, batch_heatmaps):
@@ -2377,8 +2378,9 @@ class Eval_PoseTrack17_det():
             print(scores)
 
             if not self.debug:
-                for h,s in zip(headers, scores):
-                    self.logger.log({'AP '+h:float(s)})
+                if use_wandb:
+                    for h,s in zip(headers, scores):
+                        self.logger.log({'AP '+h:float(s)})
 
             print('Running PoseTrack Pose Tracking Eval')
             pose_track = subprocess.check_output(['python', '-m', self.exec_loc,'--groundTruth='+self.targ_dir,\
@@ -2396,8 +2398,9 @@ class Eval_PoseTrack17_det():
             print(scores)
 
             if not self.debug:
-                for m,h,s in zip(metric, headers, scores):
-                    self.logger.log({m+' '+h:float(s)})
+                if use_wandb:
+                    for m,h,s in zip(metric, headers, scores):
+                        self.logger.log({m+' '+h:float(s)})
 
             print('Saved to: {}'.format(self.pred_dir))
 

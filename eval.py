@@ -20,7 +20,11 @@ from checkpoint                         import load_checkpoint
 
 import pprint 
 
-import wandb
+try:
+    import wandb
+    use_wandb = True
+except ImportError as e: #Optionally use wandb for logging
+    use_wandb = False
 
 def eval(**args):
     """
@@ -49,10 +53,14 @@ def eval(**args):
 
     run_id = args['exp']
     if not args['debug']:
-        wandb.init(project=args['dataset'], name=args['exp'], config=args, tags=args['tags'])
+        if use_wandb:
+            wandb.init(project=args['dataset'], name=args['exp'], config=args, tags=args['tags'])
 
-        #Replace result dir with wandb unique id, much easier to find checkpoints
-        run_id = wandb.run.id
+            #Replace result dir with wandb unique id, much easier to find checkpoints
+            run_id = wandb.run.id
+        else:
+            run_id = args['exp']
+
         if run_id:
             result_dir = os.path.join(args['save_dir'], args['model'], '_'.join((args['dataset'], run_id)))
             log_dir    = os.path.join(result_dir, 'logs')
@@ -113,7 +121,7 @@ def eval(**args):
     # Training Setup
     params     = [p for p in model.parameters() if p.requires_grad]
 
-    acc_metric = Metrics(**args, result_dir=result_dir, ndata=len(eval_loader.dataset), logger=wandb, run_id=run_id)
+    acc_metric = Metrics(**args, result_dir=result_dir, ndata=len(eval_loader.dataset), logger=wandb if use_wandb else None, run_id=run_id)
     acc = 0.0
 
     # Setup Model To Evaluate 
@@ -175,7 +183,8 @@ def eval(**args):
     print('Accuracy of the network on the {} set: {:.3f} %\n'.format(args['load_type'], 100.*acc))
 
     if not args['debug']:
-        wandb.log({'val accuracy':100.*acc})
+        if use_wandb:
+            wandb.log({'val accuracy':100.*acc})
 
         writer.add_scalar(args['dataset']+'/'+args['model']+'/'+args['load_type']+'_accuracy', 100.*acc)
         # Close Tensorboard Element

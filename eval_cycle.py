@@ -36,7 +36,11 @@ from checkpoint                         import load_checkpoint
 
 import pprint
 
-import wandb 
+try:
+    import wandb
+    use_wandb = True
+except ImportError as e: #Optionally use wandb for logging
+    use_wandb = False
 
 import kornia
 
@@ -67,10 +71,14 @@ def eval(**args):
 
     run_id = args['exp']
     if not args['debug']:
-        wandb.init(project=args['dataset'], name=args['exp'], config=args, tags=args['tags'])
+        if use_wandb:
+            wandb.init(project=args['dataset'], name=args['exp'], config=args, tags=args['tags'])
 
-        #Replace result dir with wandb unique id, much easier to find checkpoints
-        run_id = wandb.run.id
+            #Replace result dir with wandb unique id, much easier to find checkpoints
+            run_id = wandb.run.id
+        else:
+            run_id = args['exp']
+
         if run_id:
             result_dir = os.path.join(args['save_dir'], args['model'], '_'.join((args['dataset'], run_id)))
             log_dir    = os.path.join(result_dir, 'logs')
@@ -118,14 +126,6 @@ def eval(**args):
     else:
         sys.exit('load_type must be valid or test for eval, exiting')
 
-    # Save dataset and metric Python file 
-    if not args['debug']:
-        dataset_file = os.path.join('datasets',eval_loader.dataset.__class__.__name__+'.py')
-        wandb.save(dataset_file)
-
-        dataset_file = os.path.join('metrics.py')
-        wandb.save(dataset_file)
-
     if isinstance(args['pretrained'], str):
         ckpt = load_checkpoint(args['pretrained'])
 
@@ -139,7 +139,7 @@ def eval(**args):
     # Training Setup
     params     = [p for p in model.parameters() if p.requires_grad]
 
-    acc_metric = Metrics(**args, result_dir=result_dir, ndata=len(eval_loader.dataset), logger=wandb, run_id=run_id)
+    acc_metric = Metrics(**args, result_dir=result_dir, ndata=len(eval_loader.dataset), logger=wandb if use_wandb else None, run_id=run_id)
     acc = 0.0
 
     # Setup Model To Evaluate 

@@ -20,7 +20,11 @@ from checkpoint                         import save_checkpoint, load_checkpoint
 
 import pprint
 
-import wandb
+try:
+    import wandb
+    use_wandb = True
+except ImportError as e: #Optionally use wandb for logging
+    use_wandb = False
 
 def train(**args):
     """
@@ -58,10 +62,15 @@ def train(**args):
         save_dir   = os.path.join(result_dir, 'checkpoints')
 
         if not args['debug']:
-            wandb.init(project=args['dataset'], name=args['exp'], config=args, tags=args['tags'])
 
-            #Replace result dir with wandb unique id, much easier to find checkpoints
-            run_id = wandb.run.id 
+            if use_wandb:
+                wandb.init(project=args['dataset'], name=args['exp'], config=args, tags=args['tags'])
+
+                #Replace result dir with wandb unique id, much easier to find checkpoints
+                run_id = wandb.run.id 
+            else:
+                run_id = args['exp']
+
             if run_id: 
                 result_dir = os.path.join(args['save_dir'], args['model'], '_'.join((args['dataset'], run_id)))
                 log_dir    = os.path.join(result_dir, 'logs')
@@ -107,11 +116,6 @@ def train(**args):
 
         else:
             sys.exit('Invalid environment selection for training, exiting')
-
-        # Save dataset Python file 
-        if not args['debug']:
-            dataset_file = os.path.join('datasets',train_loader.dataset.__class__.__name__+'.py')
-            wandb.save(dataset_file)
 
         # Training Setup
         params     = [p for p in model.parameters() if p.requires_grad]
@@ -191,9 +195,6 @@ def train(**args):
 
                 optimizer.load_state_dict(load_checkpoint(args['pretrained'], key_name='optimizer'))
 
-                #Ideally save the scheduler as well
-                #scheduler.step(epoch=start_epoch)
-
                 for _ in range(start_epoch):
                     scheduler.step()
 
@@ -208,9 +209,9 @@ def train(**args):
         best_val_acc = 0.0
 
         # Start: Training Loop
-        print('Starting Schedulers lr: {}'.format(scheduler.get_lr()[0]))
+        print('Starting Schedulers lr: {}'.format(scheduler.get_last_lr()[0]))
         for epoch in range(start_epoch, args['epoch']):
-            acc_metric = Metrics(**args, ndata=len(train_loader.dataset), logger=wandb)
+            acc_metric = Metrics(**args, ndata=len(train_loader.dataset), logger=wandb if use_wandb else None)
             running_loss = 0.0
             print('Epoch: ', epoch)
 
@@ -259,7 +260,8 @@ def train(**args):
 
                     # Add Learning Rate Element
                     for param_group in optimizer.param_groups:
-                        wandb.log({'lr':param_group['lr'],'train loss':loss.item()/mini_batch_size})
+                        if use_wandb:
+                            wandb.log({'lr':param_group['lr'],'train loss':loss.item()/mini_batch_size})
                         writer.add_scalar(args['dataset']+'/'+args['model']+'/learning_rate', param_group['lr'], epoch*len(train_loader) + step)
 
                     # Add Training Loss Element
@@ -269,7 +271,8 @@ def train(**args):
                     with torch.no_grad():
                         # Add Training Accuracy Element
                         acc = acc_metric.get_accuracy(outputs, annotations)
-                    wandb.log({'train accuracy':acc.item()})
+                    if use_wandb:
+                        wandb.log({'train accuracy':acc.item()})
 
                 if ((epoch*len(train_loader) + step+1) % 100 == 0):
                     print('Epoch: {}/{}, step: {}/{} | train loss: {:.5f}'.format(epoch, args['epoch'], step+1, len(train_loader), running_loss/float(step+1)/mini_batch_size))
@@ -288,7 +291,7 @@ def train(**args):
                     running_batch = 0
 
             scheduler.step()
-            print('Schedulers lr: {}'.format(scheduler.get_lr()[0]))
+            print('Schedulers lr: {}'.format(scheduler.get_last_lr()[0]))
 
             ''' #For now, avoid saving every checkpoint
             if not args['debug']:
@@ -300,7 +303,8 @@ def train(**args):
    
             prior_track_models = ['FlowTrack_r_gt_v5_no_max','FlowTrack_r_gt_v5_linear']
             if not args['debug'] and args['model'] in prior_track_models:
-                wandb.log({'epoch':epoch, 'pred_to_prior': model.use_pred/model.total_priors})
+                if use_wandb:
+                    wandb.log({'epoch':epoch, 'pred_to_prior': model.use_pred/model.total_priors})
                 print('total_priors: {}, use_gt: {}, use_pred: {}'.format(model.total_priors, model.use_gt, model.use_pred))
 
             ## START FOR: Validation Accuracy
@@ -311,7 +315,8 @@ def train(**args):
                 model.reset_vals() #Reset the values for tracking usage of predictions priors or gt priors
 
             if not args['debug']:
-                wandb.log({'epoch':epoch, 'val accuracy':running_acc[-1]})
+                if use_wandb:
+                    wandb.log({'epoch':epoch, 'val accuracy':running_acc[-1]})
 
                 writer.add_scalar(args['dataset']+'/'+args['model']+'/validation_accuracy', 100.*running_acc[-1], epoch*len(train_loader) + step)
 
@@ -328,7 +333,8 @@ def train(**args):
 
                 if not args['debug']:
                     #Log best validation accuracy
-                    wandb.run.summary['best_accuracy'] = best_val_acc
+                    if use_wandb:
+                        wandb.run.summary['best_accuracy'] = best_val_acc
 
                     # Save Current Model
                     save_path = os.path.join(save_dir, args['dataset']+'_best_model.pkl')
@@ -341,7 +347,7 @@ def train(**args):
 
 def valid(valid_loader, running_acc, model, model_loss, device):
     running_loss = 0.
-    acc_metric = Metrics(**args, ndata=len(valid_loader.dataset), logger=wandb)
+    acc_metric = Metrics(**args, ndata=len(valid_loader.dataset), logger=wandb if use_wandb else None)
     model.eval()
 
     with torch.no_grad():

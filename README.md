@@ -10,6 +10,8 @@ This source code was built using [ViP: Video Platform for PyTorch](https://githu
 
 Recommended installation with VirtualEnvWrapper and [requirements.txt](https://github.com/MichiganCOG/Surgical_Hands_RELEASE/blob/main/requirements.txt)
 
+(Optional) Supports [Weights & Biases](https://github.com/wandb/client) for logging. Install with `pip install wandb`.
+
 ## Datasets
  - **Mixed Hands** Dataset used for image pretraining are the Manual and Synthetic hand datasets (hence Mixed Hands) from the [CMU Panoptic Dataset](http://domedb.perception.cs.cmu.edu/handdb.html)
 	- Extract to `$ROOT/data` directory and configure using `scripts/gen_json_mixed_hands.py`
@@ -30,7 +32,7 @@ Recommended installation with VirtualEnvWrapper and [requirements.txt](https://g
 
 ## Training and Evaluation
 ### Pre-train on larger image dataset
-`python train.py --cfg_file ./cfgs/config_hand_resnet --dataset Mixed_Hands --acc_metric PCK_FlowTrack --json_path ./data/hand_labels_mixed --model FlowTrack --epoch 75 --lr 1e-4 --batch_size 16 --milestones 40,60 `
+`python train.py --cfg_file ./cfgs/config_hand_resnet.yaml --dataset Mixed_Hands --acc_metric PCK_FlowTrack --json_path ./data/hand_labels_mixed --model FlowTrack --epoch 75 --lr 1e-4 --batch_size 16 --milestones 40,60`
 
 ### Finetune on our (Surgical Hands) dataset
 - (Baseline) `python train.py --cfg_file ./cfgs/config_train_surgical_hands_baseline.yaml --json_path ./data/pub_surgical/annotations_fold$NUM --pretrained ./weights/Mixed_Hands/Mixed_Hands_best_model.pkl --tags folda$NUM`
