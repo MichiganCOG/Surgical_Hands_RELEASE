@@ -15,3 +15,4 @@ torch
 torchvision
 tqdm
 tensorboardX==2.2
+wandb

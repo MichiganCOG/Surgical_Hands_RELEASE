@@ -39,6 +39,8 @@ save_dir:          './results'           # Path to results directory
 seed:              999                   # Seed for reproducibility 
 weight_decay:      0.0001                # Weight decay
 
+use_wandb:         False                 # Use Weight&Biases for logging data
+
 #Config parameters unique to pose model
 gaussian_sigma:    3.0        # Gaussian keypoint sigma value (default is 3.0)
 in_channels:       2          # (x,y) or (x,y,confidence)

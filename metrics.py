@@ -8,11 +8,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-try:
-    import wandb
-    use_wandb = True
-except ImportError as e: #Optionally use wandb for logging
-    use_wandb = False
+import wandb
 
 from models.gcn.gcn import GCN
 
@@ -49,6 +45,7 @@ class Metrics(object):
             self.metric_object = Eval_PoseTrack17_det(*args, **kwargs)
         else:
             self.metric_type = None
+
 
     def get_accuracy(self, predictions, targets, **kwargs):
         """
@@ -343,7 +340,7 @@ class PCK_Curve_Hand():
 
             if not self.debug:
                 mean_acc = torch.mean(self.acc, dim=1).cpu().numpy()
-                if use_wandb:
+                if self.logger:
                     for idx in range(len(self.threshold)):
                         self.logger.log({'PCKh (Normalized Distance)':mean_acc[idx]})
 
@@ -1747,7 +1744,7 @@ class Eval_PoseTrack18_det():
             print(scores)
 
             if not self.debug:
-                if use_wandb:
+                if self.logger:
                     for h,s in zip(headers, scores):
                         self.logger.log({'AP '+h:float(s)})
 
@@ -1770,7 +1767,7 @@ class Eval_PoseTrack18_det():
             print(scores)
 
             if not self.debug:
-                if use_wandb:
+                if self.logger:
                     for m,h,s in zip(metric, headers, scores):
                         self.logger.log({m+' '+h:float(s)})
 
@@ -2378,7 +2375,7 @@ class Eval_PoseTrack17_det():
             print(scores)
 
             if not self.debug:
-                if use_wandb:
+                if self.logger:
                     for h,s in zip(headers, scores):
                         self.logger.log({'AP '+h:float(s)})
 
@@ -2398,7 +2395,7 @@ class Eval_PoseTrack17_det():
             print(scores)
 
             if not self.debug:
-                if use_wandb:
+                if self.logger:
                     for m,h,s in zip(metric, headers, scores):
                         self.logger.log({m+' '+h:float(s)})
 

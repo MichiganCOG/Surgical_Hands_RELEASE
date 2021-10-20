@@ -36,11 +36,7 @@ from checkpoint                         import load_checkpoint
 
 import pprint
 
-try:
-    import wandb
-    use_wandb = True
-except ImportError as e: #Optionally use wandb for logging
-    use_wandb = False
+import wandb
 
 import kornia
 
@@ -70,14 +66,13 @@ def eval(**args):
     save_dir   = os.path.join(result_dir, 'checkpoints')
 
     run_id = args['exp']
+    use_wandb  = args.get('use_wandb', False)
     if not args['debug']:
         if use_wandb:
             wandb.init(project=args['dataset'], name=args['exp'], config=args, tags=args['tags'])
 
             #Replace result dir with wandb unique id, much easier to find checkpoints
             run_id = wandb.run.id
-        else:
-            run_id = args['exp']
 
         if run_id:
             result_dir = os.path.join(args['save_dir'], args['model'], '_'.join((args['dataset'], run_id)))

@@ -10,7 +10,7 @@ This source code was built using [ViP: Video Platform for PyTorch](https://githu
 
 Recommended installation with VirtualEnvWrapper and [requirements.txt](https://github.com/MichiganCOG/Surgical_Hands_RELEASE/blob/main/requirements.txt)
 
-(Optional) Supports [Weights & Biases](https://github.com/wandb/client) for logging. Install with `pip install wandb`.
+(Optional) Supports [Weights & Biases](https://github.com/wandb/client) for logging, use `--use_wandb=True` in YAML file (--debug must also be set to 0).
 
 ## Datasets
  - **Mixed Hands** Dataset used for image pretraining are the Manual and Synthetic hand datasets (hence Mixed Hands) from the [CMU Panoptic Dataset](http://domedb.perception.cs.cmu.edu/handdb.html)
