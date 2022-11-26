@@ -57,10 +57,12 @@ For evaluation, we modify the [Poseval Evaluation repository](https://github.com
 If you find this data useful, please consider citing:
 
 ```
-@article{louis2021temporally,
-  title={Temporally Guided Articulated Hand Pose Tracking in Surgical Videos},
+@article{louis2022temporally,
+  title={Temporally guided articulated hand pose tracking in surgical videos},
   author={Louis, Nathan and Zhou, Luowei and Yule, Steven J and Dias, Roger D and Manojlovich, Milisa and Pagani, Francis D and Likosky, Donald S and Corso, Jason J},
-  journal={arXiv preprint arXiv:2101.04281},
-  year={2021}
+  journal={International Journal of Computer Assisted Radiology and Surgery},
+  pages={1--9},
+  year={2022},
+  publisher={Springer}
 }
 ```
