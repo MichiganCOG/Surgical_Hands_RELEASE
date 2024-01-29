@@ -63,6 +63,11 @@ def data_loader(**kwargs):
         loader = torch.utils.data.DataLoader(dataset=data, batch_size=kwargs['batch_size']*num_nodes, shuffle=True, num_workers=kwargs['num_workers'])
         ret_dict = dict(train=loader)
 
+    elif load_type == 'runtime':
+        data = create_dataset_object(**kwargs)
+
+        loader = torch.utils.data.DataLoader(dataset=data, batch_size=kwargs['batch_size']*num_nodes, shuffle=False, num_workers=kwargs['num_workers'])
+        ret_dict = dict(runtime=loader)
     else:
         data = create_dataset_object(**kwargs)
 

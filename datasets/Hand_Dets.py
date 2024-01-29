@@ -8,6 +8,8 @@ import cv2
 import os
 import numpy as np
 
+import re
+
 class Hand_Dets(DetectionDataset):
     def __init__(self, *args, **kwargs):
         super(Hand_Dets, self).__init__(*args, **kwargs)
@@ -161,13 +163,14 @@ class Hand_Dets(DetectionDataset):
         conf_score = np.zeros((self.clip_length))-1
         cls_score  = np.zeros((self.clip_length))-1
         labels     = np.zeros((self.clip_length))-1
+        track_ids   = np.zeros((self.clip_length), dtype=np.int32)-1 #incase bounding box tracking was performed
     
         frame_ids   = np.zeros((self.clip_length), dtype=np.int64)
         frame_paths = []
         for frame_ind in range(len(vid_info['frames'])):
             frame         = vid_info['frames'][frame_ind]
             frame_path    = vid_info['frames'][frame_ind]['img_path']
-            frame_id      = int(frame['frame_id'])
+            frame_id      = int(re.sub('[^0-9]', '', frame['frame_id']))
             vid_id         = frame['vid_id']
 
             frame_paths.append(frame_path)
@@ -183,6 +186,7 @@ class Hand_Dets(DetectionDataset):
             conf_score[frame_ind] = obj['confidence']
             cls_score[frame_ind]  = obj['cls_score']
             labels[frame_ind]     = obj['cls_pred']
+            track_ids[frame_ind]       = obj.get('track_id', obj['obj_id']) #Default to obj_id if tracking was not performing prior
             xmin, ymin, xmax, ymax = bbox[frame_ind]
 
             #expand area around bbox
@@ -221,28 +225,6 @@ class Hand_Dets(DetectionDataset):
 
             vid_data[frame_ind] = temp_data 
 
-            '''
-            import matplotlib.pyplot as plt
-            import matplotlib.patches as patches
-
-            fig = plt.figure()
-            ax1 = fig.add_subplot(111)
-
-            ax1.imshow(input_data)
-
-            for ind in range(self.max_objects):
-                xmin, ymin, xmax, ymax = bbox[ind]
-                rect = patches.Rectangle((xmin,ymin), xmax-xmin, ymax-ymin, linewidth=2, edgecolor='g', facecolor='none')
-                ax1.add_patch(rect)
-
-                ax1.text(xmin, ymin, str(cls_score[ind])[:6])
-
-                xmin, ymin, xmax, ymax = hand_crops[ind]
-                rect = patches.Rectangle((xmin,ymin), xmax-xmin, ymax-ymin, linewidth=2, edgecolor='r', facecolor='none')
-                ax1.add_patch(rect)
-            plt.show()
-            '''
-
         vid_data   = torch.from_numpy(vid_data)
         labels     = torch.from_numpy(labels).float()
 
@@ -253,11 +235,12 @@ class Hand_Dets(DetectionDataset):
         ret_dict['data']   = vid_data 
 
         annot_dict               = dict()
-        if self.viz:
-            annot_dict['data']   = cv2.cvtColor(np.copy(input_data), cv2.COLOR_BGR2RGB)
+        #if self.viz:
+        #    annot_dict['data']   = cv2.cvtColor(np.copy(input_data), cv2.COLOR_BGR2RGB)
         annot_dict['labels']     = labels
-        annot_dict['heatmaps']   = target
+        #annot_dict['heatmaps']   = target
         annot_dict['bbox']       = bbox 
+        annot_dict['track_ids']  = track_ids
         annot_dict['conf_score'] = conf_score
         annot_dict['input_crop'] = hand_crops  
         annot_dict['padding']    = padding 
@@ -265,6 +248,8 @@ class Hand_Dets(DetectionDataset):
         annot_dict['frame_path'] = frame_paths 
         annot_dict['frame_ids']  = frame_ids
         annot_dict['frame_size'] = (width, height) 
+        annot_dict['vid_len']    = vid_info.get('vid_len',-1)
+        annot_dict['fps']        = vid_info.get('fps', 30)
         annot_dict['raw_frame_size'] = np.array([width, height])
         annot_dict['nframes']    = 1 #not useful
         annot_dict['vid_id']     = frame['vid_id']

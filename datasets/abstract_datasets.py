@@ -215,6 +215,9 @@ class RecognitionDataset(VideoDataset):
             if not os.path.exists(full_json_path):
                 full_json_path = os.path.join(self.json_path, 'test.json')
 
+        elif self.load_type == 'runtime':
+            full_json_path = self.json_path
+
         else:
             full_json_path = os.path.join(self.json_path, 'test.json')
 
@@ -280,6 +283,9 @@ class DetectionDataset(VideoDataset):
             if not os.path.exists(full_json_path):
                 full_json_path = os.path.join(self.json_path, 'test.json')
 
+        elif self.load_type == 'runtime':
+            full_json_path = self.json_path
+
         else:
             full_json_path = os.path.join(self.json_path, 'test.json')
 
@@ -289,11 +295,11 @@ class DetectionDataset(VideoDataset):
 
         # Load the information for each video and process it into clips
         for video_info in json_data:
-            clips = self._extractClips(video_info['frames'])
+            clips = self._extractClips(video_info.pop('frames'))
 
             # Each clip is a list of dictionaries per frame containing information
             # Example info: object bbox annotations, object classes, frame img path
             for clip in clips:    
-                self.samples.append(dict(frames=clip, base_path=video_info['base_path'], frame_size=video_info['frame_size']))
+                self.samples.append({'frames':clip, **video_info})
 
 
