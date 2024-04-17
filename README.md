@@ -17,17 +17,17 @@ Recommended installation with VirtualEnvWrapper and [requirements.txt](https://g
 	- Extract to `$ROOT/data` directory and configure using `scripts/gen_json_mixed_hands.py`
  - **Surgical Hands** Our newly collected dataset that contains videos of surgical procedures accompanied with bounding box, pose, and tracking annotations. 
  	 - Download the following and extract to `$ROOT/data` directory
-	  	- [Surgical Hands dataset](https://drive.google.com/file/d/1l5_4rlZLvOim34uHCKic4GUXvXfjDN_9/view?usp=sharing)
-	  	- [Hand Detections](https://drive.google.com/file/d/1dWhZF595ixS-XBIeawaS3mY01yfsE_BO/view?usp=sharing)
+	  	- [Surgical Hands dataset](https://prism.eecs.umich.edu/natlouis/surgical_hands/surgical_hands_release.tar.gz)
+	  	- [Hand Detections](https://prism.eecs.umich.edu/natlouis/surgical_hands/hand_detections.tar.gz)
 	 - Configure using `scripts/gen_json_surgical_hands_folds_n.py` (for ground truth) and `scripts/gen_json_surgical_hands_dets_folds_n.py` (for detections) into formats needed for code base
 	 - All experiments are done using k-fold cross validation and each data is split accordingly.
 
 ## Weights
 - Download and extract to `$ROOT/weights` directory
-	- ResNet152 ImageNet [weights](https://drive.google.com/file/d/14u4TYEpu6d6Eh4PsIOjeTYiMfc4nXAMe/view?usp=sharing)
-	- Pretrained [weights](https://drive.google.com/drive/folders/1upSSUr4c2_SMmpzfQumoevNYhpig0UuW?usp=sharing) on Mixed Hands image dataset
-	- Baseline [weights](https://drive.google.com/drive/folders/1skZGRnX_6SNiB-DROgg1RYBy4qI0BURB?usp=sharing) (trained on Surgical Hands)
-	- Our model [weights](https://drive.google.com/drive/folders/1zCnU8drwr1Mzy4rOmaP3mQ-jSXiYOALN?usp=sharing) (trained on Surgical Hands)
+	- ResNet152 ImageNet [weights](https://prism.eecs.umich.edu/natlouis/surgical_hands/resnet152-b121ed2d.pth)
+	- Pretrained [weights](https://prism.eecs.umich.edu/natlouis/surgical_hands/Mixed_Hands/Mixed_Hands_best_model.pkl) on Mixed Hands image dataset
+	- Baseline [weights](https://prism.eecs.umich.edu/natlouis/surgical_hands/Surgical_Hands/FlowTrack/folda15.pkl) (trained on Surgical Hands)
+	- Our model [weights](https://prism.eecs.umich.edu/natlouis/surgical_hands/Surgical_Hands_v2/FlowTrack_r_gt_v5_linear/folda15.pkl) (trained on Surgical Hands)
 	- As mentioned above, all experiments are done using k-fold cross validation. So there are k sets of weights for each model. A single set of weights can be trained on all data
 
 ## Training and Evaluation
