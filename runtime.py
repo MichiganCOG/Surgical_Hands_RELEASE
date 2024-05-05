@@ -105,7 +105,7 @@ class Runtime:
         #Model config
         model = create_model_object(**kwargs)
         print('Using model: {}'.format(type(model).__name__))
-        self.device = torch.device('cuda:0' if torch.cuda.is_available else 'cpu')
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
         #ckpt_path = glob.glob(os.path.join(*kwargs['cfg_file'].split('/')[:-1],'checkpoints','*_best_model.pkl'))[0]
         ckpt_path = kwargs['pretrained']
@@ -376,6 +376,7 @@ if __name__ == "__main__":
 
             root_dir = outputs[seq_name]['root_dir']
             #Draw detections on frames
+            track_centers = {}
             for frame_path in tqdm(sorted(outputs[seq_name]['frames'].keys())):
                 frame_dat = outputs[seq_name]['frames'][frame_path]
 
@@ -399,9 +400,23 @@ if __name__ == "__main__":
                         track_idx += 1
                     box_color = tid_clr[tid]
 
+                    #Bounding box
                     xmin,ymin,xmax,ymax = map(int, box)
-                    #Draw bounding box
-                    cv2.rectangle(img, (int(xmin),int(ymin)), (int(xmax),int(ymax)), color=box_color, thickness=box_line_size)
+
+                    #Keep track of center
+                    if tid not in track_centers:
+                        track_centers[tid] = []
+                    x_ctr = (xmax + xmin)/2
+                    y_ctr = (ymax + ymin)/2
+                    track_centers[tid].append([x_ctr,y_ctr])
+                    if len(track_centers[tid]) > 2:
+                        #Draw last center of track of last 150 frames
+                        start = max(len(track_centers[tid])-150, 0)
+                        end   = len(track_centers[tid])
+                        for i in range(start, end):
+                            c1 = track_centers[tid][i-1]
+                            c2 = track_centers[tid][i]
+                            #cv2.line(img, (int(c1[0]), int(c1[1])), (int(c2[0]), int(c2[1])), box_color, thickness=line_size)
 
                     #Draw joints
                     for idx,(p1,p2) in enumerate(links):
@@ -416,11 +431,13 @@ if __name__ == "__main__":
                         if c1 != 0 and c2 != 0:
                             cv2.line(img, (int(x1),int(y1)), (int(x2),int(y2)), (c[2],c[1],c[0]), 3)
 
-                    #Draw tracking id
-                    cv2.putText(img, 'id: '+str(tid), (int(xmin), int(ymin)), font, 0.5, (255,255,255), 1, cv2.LINE_AA)
+                    #Draw bounding box
+                    cv2.rectangle(img, (int(xmin),int(ymin)), (int(xmax),int(ymax)), color=box_color, thickness=box_line_size)
 
-                draw_text(img, frame_path.split('/')[-1], pos=(0,0),
-                          text_color=(255,255,255), text_color_bg=(0,0,0))
+                    #Draw tracking id
+                    #cv2.putText(img, 'id: '+str(tid), (int(xmin), int(ymin)), font, 0.5, (255,255,255), 1, cv2.LINE_AA)
+
+                #draw_text(img, frame_path.split('/')[-1], pos=(0,0),text_color=(255,255,255), text_color_bg=(0,0,0))
 
                 if write_vid:
                     video_writer.write(img)

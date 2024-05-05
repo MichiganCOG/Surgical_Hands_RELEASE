@@ -48,7 +48,7 @@ def eval(**args):
     save_dir   = os.path.join(result_dir, 'checkpoints')
 
     run_id = args['exp']
-    use_wandb args.get('use_wandb', False)
+    use_wandb  = args.get('use_wandb', False)
     if not args['debug']:
         if use_wandb:
             wandb.init(project=args['dataset'], name=args['exp'], config=args, tags=args['tags'])

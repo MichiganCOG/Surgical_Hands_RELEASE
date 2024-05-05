@@ -43,7 +43,7 @@ class Mixed_Hands_v2(DetectionDataset):
                                'Ring_k', 'Ring_b', 'Ring_m', 'Ring_t', \
                                'Pinky_k', 'Pinky_b', 'Pinky_m', 'Pinky_t']
 
-        self.neighbor_link = [[1,1], [1,2], [2,3], [3,4],
+        self.neighbor_link = [[0,1], [1,2], [2,3], [3,4],
                               [0,5], [5,6], [6,7], [7,8],
                               [0,9], [9,10], [10,11], [11,12],
                               [0,13], [13,14],[14,15], [15,16],
